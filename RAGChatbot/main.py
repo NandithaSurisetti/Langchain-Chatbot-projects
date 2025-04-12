@@ -4,7 +4,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import OpenAIEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import FAISS
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 
@@ -20,7 +20,7 @@ def generator(input):
     docs=loader.load()
     text_splitter=RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=200)
     documents=text_splitter.split_documents(docs)
-    db=Chroma.from_documents(documents[ :10], OpenAIEmbeddings())
+    db=FAISS.from_documents(documents[ :10], OpenAIEmbeddings())
     retriever=db.as_retriever()
 
     llm=ChatOpenAI(model="gpt-3.5-turbo")
